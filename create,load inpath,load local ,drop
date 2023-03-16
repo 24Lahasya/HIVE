@@ -1,0 +1,205 @@
+[training@localhost ~]$ hive
+Logging initialized using configuration in file:/etc/hive/conf.dist/hive-log4j.properties
+Hive history file=/tmp/training/hive_job_log_training_202302140634_953906753.txt
+hive> CREATE TABLE userRatings(userid INT,movieid INT,rating INt,unixtime BIGINT) ROW FORMATE DELIMITED
+    > FEILDS TERMINATED BY '/t'
+    > STORED AS TEXTFILE;
+FAILED: ParseException line 1:76 cannot recognize input near 'ROW' 'FORMATE' 'DELIMITED' in table row format specification
+
+hive> CREATE TABLE userRatings(userid INT,movieid INT,rating INt,unixtime BIGINT) ROW FORMAT DELIMITED 
+    > FEILDS TERMINATED BY '\t'                                                                       
+    > STORED AS TEXTFILE;                                                                             
+FAILED: ParseException line 2:0 mismatched input 'FEILDS' expecting EOF near 'DELIMITED'
+
+hive> CREATE TABLE userRatings(userid INT,movieid INT,rating INt,unixtime BIGINT) ROW FORMAT DELIMITED
+    > FIELDS TERMINATED BY '\t'                                                                       
+    > STORED AS TEXTFILE;                                                                             
+OK
+Time taken: 1.694 seconds
+hive> LOAD DATA INPATH hiveworks/u.data
+    > INTO TABLE userRatings;          
+FAILED: ParseException line 1:17 mismatched input 'hiveworks' expecting StringLiteral near 'INPATH' in load statement
+
+hive> LOAD DATA INPATH 'hiveworks/u.data'
+    > INTO TABLE userRatings;            
+Loading data to table default.userratings
+OK
+Time taken: 0.266 seconds
+hive> SELECT * from userRatings limit 5;
+OK
+196	242	3	881250949
+186	302	3	891717742
+22	377	1	878887116
+244	51	2	880606923
+166	346	1	886397596
+Time taken: 0.178 seconds
+hive> CREATE TABLE users(userid INT,age INT,gender STRING,occupation STRING,zipcode INT) ROW FORMAT DELIMITED
+    > FIELDS TERMINATED BY '|'                                                                               
+    > STORED AS TEXTFILE;                                                                                    
+OK
+Time taken: 0.064 seconds
+hive> LOAD DATA LOCAL '/home/training/hiveworkspace/ml-data'                                                 
+    > INTO TABLE users;                                                                                      
+FAILED: ParseException line 1:16 mismatched input ''/home/training/hiveworkspace/ml-data'' expecting INPATH near 'LOCAL' in load statement
+
+hive> LOAD DATA LOCAL '/home/training/hiveworkspace/ml-data/user'
+    > INTO TABLE users;                                          
+FAILED: ParseException line 1:16 mismatched input ''/home/training/hiveworkspace/ml-data/user'' expecting INPATH near 'LOCAL' in load statement
+
+hive> LOAD DATA LOCAL '/home/training/hiveworkspace/ml-data/users'
+    > INTO TABLE users;                                           
+FAILED: ParseException line 1:16 mismatched input ''/home/training/hiveworkspace/ml-data/users'' expecting INPATH near 'LOCAL' in load statement
+
+hive> LOAD DATA LOCAL'/home/training/hiveworkspace/ml-data/users' 
+    > INTO TABLE users;                                          
+FAILED: ParseException line 1:15 mismatched input ''/home/training/hiveworkspace/ml-data/users'' expecting INPATH near 'LOCAL' in load statement
+
+hive> LOAD DATA INPATH '/home/training/hiveworkspace/ml-data/user' 
+    > INTO TABLE users;                                           
+FAILED: SemanticException Line 1:17 Invalid path ''/home/training/hiveworkspace/ml-data/user'': No files matching path hdfs://0.0.0.0:8020/home/training/hiveworkspace/ml-data/user
+hive> LOAD DATA INPATH '/home/training/hiveworkspace/ml-data'     
+    > INTO TABLE users;                                      
+FAILED: SemanticException Line 1:17 Invalid path ''/home/training/hiveworkspace/ml-data'': No files matching path hdfs://0.0.0.0:8020/home/training/hiveworkspace/ml-data
+hive> LOAD DATA INPATH 'home/training/hiveworkspace/ml-data' 
+    > INTO TABLE users;                                     
+FAILED: SemanticException Line 1:17 Invalid path ''home/training/hiveworkspace/ml-data'': No files matching path hdfs://0.0.0.0:8020/user/training/home/training/hiveworkspace/ml-data
+hive> LOAD DATA LOCAL 'home/training/hiveworkspace/ml-data' 
+    > INTO TABLE users;                                    
+FAILED: ParseException line 1:16 mismatched input ''home/training/hiveworkspace/ml-data'' expecting INPATH near 'LOCAL' in load statement
+
+hive> LOAD DATA LOCAL 'home/training/hiveworkspace/ml-data/user'
+    > INTO TABLE users;                                         
+FAILED: ParseException line 1:16 mismatched input ''home/training/hiveworkspace/ml-data/user'' expecting INPATH near 'LOCAL' in load statement
+
+hive> LOAD DATA LOCAL 'home/training/hiveworkspace/ml-data/users'
+    > INTO TABLE users;                                          
+FAILED: ParseException line 1:16 mismatched input ''home/training/hiveworkspace/ml-data/users'' expecting INPATH near 'LOCAL' in load statement
+
+hive> LOAD DATA LOCAL 'home/training/hiveworkspace/ml-data/users' 
+    > INTO TABLE users;                                          
+FAILED: ParseException line 1:16 mismatched input ''home/training/hiveworkspace/ml-data/users'' expecting INPATH near 'LOCAL' in load statement
+
+hive> LOAD DATA INPATH 'home/training/hiveworkspace/ml-data/users'
+    > INTO TABLE users;                                           
+FAILED: SemanticException Line 1:17 Invalid path ''home/training/hiveworkspace/ml-data/users'': No files matching path hdfs://0.0.0.0:8020/user/training/home/training/hiveworkspace/ml-data/users
+hive> LOAD DATA LOCAL 'home/training/hiveworkspace/ml-data/u.user' 
+    > INTO TABLE users;                                           
+FAILED: ParseException line 1:16 mismatched input ''home/training/hiveworkspace/ml-data/u.user'' expecting INPATH near 'LOCAL' in load statement
+
+hive> LOAD DATA INPATH 'home/training/hiveworkspace/ml-data/u.user'
+    > INTO TABLE users;                                            
+FAILED: SemanticException Line 1:17 Invalid path ''home/training/hiveworkspace/ml-data/u.user'': No files matching path hdfs://0.0.0.0:8020/user/training/home/training/hiveworkspace/ml-data/u.user
+hive> LOAD DATA INPATH 'hiveworks/u.user'                          
+    > INTO TABLE users;                  
+FAILED: SemanticException Line 1:17 Invalid path ''hiveworks/u.user'': No files matching path hdfs://0.0.0.0:8020/user/training/hiveworks/u.user
+hive> LOAD DATA INPATH 'user/training/hiveworkspace/ml-data/u.user'
+    > INTO TABLE users;                                            
+FAILED: SemanticException Line 1:17 Invalid path ''user/training/hiveworkspace/ml-data/u.user'': No files matching path hdfs://0.0.0.0:8020/user/training/user/training/hiveworkspace/ml-data/u.user
+hive> LOAD DATA LOCAL INPATH 'home/training/hiveworkspace/ml-data/u.user'
+    > INTO TABLE users;                                                  
+FAILED: SemanticException Line 1:23 Invalid path ''home/training/hiveworkspace/ml-data/u.user'': No files matching path file:/home/training/home/training/hiveworkspace/ml-data/u.user
+hive> LOAD DATA LOCAL INPATH 'home/training/hiveworkspace/ml-data'       
+    > INTO TABLE users;                                           
+FAILED: SemanticException Line 1:23 Invalid path ''home/training/hiveworkspace/ml-data'': No files matching path file:/home/training/home/training/hiveworkspace/ml-data
+hive> LOAD DATA LOCAL INPATH '/home/training/hiveworkspace/ml-data/u.user'
+    > INTO TABLE users;                                                   
+Copying data from file:/home/training/hiveworkspace/ml-data/u.user
+Copying file: file:/home/training/hiveworkspace/ml-data/u.user
+Loading data to table default.users
+OK
+Time taken: 0.168 seconds
+hive> select *from users limit 5;
+OK
+1	24	M	technician	85711
+2	53	F	other	94043
+3	23	M	writer	32067
+4	24	M	technician	43537
+5	33	F	other	15213
+Time taken: 0.071 seconds
+hive> select *from userratings join users on userratings.userid=users.userid limit 5;
+Total MapReduce jobs = 1
+Launching Job 1 out of 1
+Number of reduce tasks not specified. Estimated from input data size: 1
+In order to change the average load for a reducer (in bytes):
+  set hive.exec.reducers.bytes.per.reducer=<number>
+In order to limit the maximum number of reducers:
+  set hive.exec.reducers.max=<number>
+In order to set a constant number of reducers:
+  set mapred.reduce.tasks=<number>
+Starting Job = job_202302140555_0001, Tracking URL = http://0.0.0.0:50030/jobdetails.jsp?jobid=job_202302140555_0001
+Kill Command = /usr/lib/hadoop/bin/hadoop job  -Dmapred.job.tracker=0.0.0.0:8021 -kill job_202302140555_0001
+Hadoop job information for Stage-1: number of mappers: 2; number of reducers: 1
+2023-02-14 08:04:39,914 Stage-1 map = 0%,  reduce = 0%
+2023-02-14 08:04:43,031 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 2.04 sec
+2023-02-14 08:04:44,041 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 2.04 sec
+2023-02-14 08:04:45,051 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 3.8 sec
+2023-02-14 08:04:46,056 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 3.8 sec
+2023-02-14 08:04:47,065 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 3.8 sec
+MapReduce Total cumulative CPU time: 3 seconds 800 msec
+Ended Job = job_202302140555_0001
+MapReduce Jobs Launched: 
+Job 0: Map: 2  Reduce: 1   Cumulative CPU: 3.8 sec   HDFS Read: 0 HDFS Write: 0 SUCCESS
+Total MapReduce CPU Time Spent: 3 seconds 800 msec
+OK
+1	270	5	888732827	1	24	M	technician	85711
+1	133	4	876892818	1	24	M	technician	85711
+1	29	1	878542869	1	24	M	technician	85711
+1	179	3	875072370	1	24	M	technician	85711
+1	237	2	875071749	1	24	M	technician	85711
+Time taken: 11.244 seconds
+hive> CREATE EXTERNAL TABLE genre(genre STRING ,id INT) ROW FORMAT DELIMITED                                             
+    > FIELDS TERMINATED BY '|'                                                                               
+    > STORED AS TEXTFILE                                                                                     
+    > location '/hiveworks/u.genre';
+OK
+Time taken: 0.044 seconds
+hive> select *from genre;
+OK
+Time taken: 0.087 seconds
+hive> describe genre;
+OK
+genre	string	
+id	int	
+Time taken: 0.051 seconds
+hive> drop table genre;
+OK
+Time taken: 0.227 seconds
+hive> CREATE EXTERNAL TABLE genre1(genre STRING ,id INT) ROW FORMAT DELIMITED        
+    > FIELDS TERMINATED BY '|'                                               
+    > STORED AS TEXTFILE                                                     
+    > location '/hiveworks/u.genre';                                         
+OK
+Time taken: 0.024 seconds
+hive> select*from genre1;
+OK
+Time taken: 0.045 seconds
+hive> CREATE EXTERNAL TABLE genre1(genre STRING ,id INT) ROW FORMAT DELIMITED
+    > FIELDS TERMINATED BY '|'                                               
+    > STORED AS TEXTFILE                                                     
+    > location '/hiveworks';                                                 
+FAILED: Error in metadata: AlreadyExistsException(message:Table genre1 already exists)
+FAILED: Execution Error, return code 1 from org.apache.hadoop.hive.ql.exec.DDLTask
+hive> drop table genre1;                                                     
+OK
+Time taken: 0.093 seconds
+hive> CREATE EXTERNAL TABLE genre1(genre STRING ,id INT) ROW FORMAT DELIMITED
+    > FIELDS TERMINATED BY '|'                                               
+    > STORED AS TEXTFILE                                                     
+    > location '/hiveworks';                                                 
+OK
+Time taken: 0.03 seconds
+hive> show tables;
+OK
+genre1
+userratings
+users
+Time taken: 0.04 seconds
+hive> drop table genre1;
+OK
+Time taken: 0.06 seconds
+hive> show tables;
+OK
+userratings
+users
+Time taken: 0.027 seconds
+hive> 
